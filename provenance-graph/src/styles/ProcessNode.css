@@ -1,0 +1,13 @@
+.process-node {
+    height: 100px;
+    width: 150px;
+    border: 1px solid #eee;
+    padding: 5px;
+    border-radius: 5px;
+    background: white;
+    text-align: center;
+
+    h4 {
+        font-size: 14px;
+    }
+}
