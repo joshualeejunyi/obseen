@@ -2,17 +2,7 @@ import { Handle, Position } from "@xyflow/react";
 
 import "../styles/ProcessNode.css";
 import { Link } from "react-router-dom";
-
-interface DataInterface {
-  processName: string;
-  label: string;
-  logs: string[];
-};
-
-interface NodeInterface {
-  data: DataInterface;
-  isConnectable: boolean;
-}
+import { NodeInterface } from "../interfaces/Interfaces";
 
 export function ProcessNode({ data, isConnectable }: NodeInterface) {
   return (

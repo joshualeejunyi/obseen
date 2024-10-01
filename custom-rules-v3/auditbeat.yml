@@ -1,0 +1,57 @@
+auditbeat.modules:
+
+- module: auditd
+  # Load audit rules from separate files. Same format as audit.rules(7).
+  audit_rule_files: [ '${path.config}/audit.rules.d/*.conf' ]
+  audit_rules: | 
+    -a always,exit -F arch=b32 -S all -F key=32bit-abi 
+
+    -a always,exit -F arch=b64 -S execve,execveat -k exec 
+
+    -a always,exit -F arch=b64 -S accept,bind,connect -F key=external-access 
+    -a always,exit -F arch=b64 -S sendto,recvfrom -F key=network-traffic
+
+    -a always,exit -F arch=b64 -S write,read -F key=file-access
+
+    -a always,exit -F arch=b64 -S open,creat,truncate,ftruncate,openat,open_by_handle_at -F exit=-EACCES -k access 
+    -a always,exit -F arch=b64 -S open,creat,truncate,ftruncate,openat,open_by_handle_at -F exit=-EPERM -k access
+
+    -w /etc/group -p wa -k identity  
+    -w /etc/passwd -p wa -k identity  
+    -w /etc/gshadow -p wa -k identity  
+
+setup.template.enabled: false
+
+#================================ Outputs =====================================
+
+# Configure what output to use when sending the data collected by the beat.
+
+output.file:
+  path: "/home/student/homework/A2/PartB/custom-rules-v3"
+  filename: auditbeat
+  rotate_every_kb: 8388608
+  number_of_files: 10
+  permissions: 0777
+  codec.json:
+    pretty: false
+
+#================================ Processors =====================================
+
+processors:
+    - drop_fields:
+        fields: ["beat", "host", "event", "process.title", "auditd.summary"]
+    - drop_event:
+        when:
+          or:
+            - equals.process.name: "gnome-shell"
+            - equals.process.name: "gnome-terminal-"
+            - equals.process.name: "gmain"
+            - equals.process.name: "gvfs-afc-volume"
+            - equals.process.name: "null-sink"
+            - equals.process.name: "xdg-desktop-portal"
+            - equals.process.name: "vmtoolsd"
+
+            - equals.auditd.data.syscall: "rt_sigaction"
+            - equals.auditd.data.syscall: "rt_sigprocmask"
+            - equals.auditd.data.syscall: "rt_sigreturn"
+            - equals.auditd.data.syscall: "rt_sigsuspend"
