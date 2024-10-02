@@ -8,6 +8,7 @@ import {
   Node,
   Edge,
   MiniMap,
+  ReactFlowProvider,
 } from "@xyflow/react";
 import { useGraphData } from "../context/GraphContext";
 import { LogInterface } from "../interfaces/Interfaces";
@@ -71,11 +72,13 @@ const TimelineView: React.FC = () => {
       <h2>
         Timeline for {selectedProcess[1].process_name} (Process ID: {processId})
       </h2>
-      <ReactFlow nodes={nodes} edges={edges} defaultViewport={{x:0, y:0, zoom:1.2}}>
-        <Controls />
-        <MiniMap />
-        <Background variant={BackgroundVariant.Lines} />
-      </ReactFlow>
+      <ReactFlowProvider>
+        <ReactFlow nodes={nodes} edges={edges} defaultViewport={{x:0, y:0, zoom:1.2}}>
+          <Controls />
+          <MiniMap pannable zoomable/>
+          <Background variant={BackgroundVariant.Lines} />
+        </ReactFlow>
+      </ReactFlowProvider>
     </div>
   );
 };

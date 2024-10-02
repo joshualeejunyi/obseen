@@ -88,6 +88,11 @@ def extract_details(log):
     socket_addr = socket_info.get('addr', 'N/A')
     socket_family = socket_info.get('family', 'N/A')
 
+    # if syscall == "read":
+    #     print("helllo")
+    #     print(file_data)
+    #     input()
+    
     return {
         'syscall': syscall,
         'process': process_name,

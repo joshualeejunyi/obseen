@@ -8,7 +8,7 @@ const TimelineNode = ({ log, index, nodeWidth, nodeHeight, gap }: TimelineNodePr
   let backgroundColor = "lightgray"; // Default background color
 
   // Customize based on the syscall type or event type
-  if (["open", "read", "write"].includes(log.details.syscall)) {
+  if (["open", "read", "write", "openat"].includes(log.details.syscall)) {
     // File access event
     nodeLabel = (
       <>
@@ -39,6 +39,18 @@ const TimelineNode = ({ log, index, nodeWidth, nodeHeight, gap }: TimelineNodePr
       </>
     );
     backgroundColor = "#3498db"; // Blue for network connections
+  } else if (["execve"].includes(log.details.syscall)) {
+    nodeLabel = (
+      <>
+        <strong>Create Process</strong>
+        <p>{log.details.executable}</p>
+        <p>{log.details.args}</p>
+
+        {/* <p>{log.details.}</p> */}
+      </>
+    )
+    backgroundColor = "#ffcccb"; // Light red
+
   } else {
     // Other syscalls
     nodeLabel = (

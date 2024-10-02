@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow } from '@xyflow/react';
+import { Background, BackgroundVariant, Controls, Edge, MiniMap, Node, ReactFlow, ReactFlowProvider } from '@xyflow/react';
  
 import { ProcessNode } from '../components/ProcessNode';
 
@@ -21,8 +21,8 @@ const calculateTreeLayout = (nodes: NodeType[], edges: EdgeType[]) => {
   const nodeHeight = 250;
 
   // Buffer space between nodes (horizontal and vertical)
-  const horizontalSpacing = 50;
-  const verticalSpacing = 100;
+  const horizontalSpacing = 14;
+  const verticalSpacing = 15;
 
   // Calculate the subtree width recursively
   const getSubtreeWidth = (nodeId: number): number => {
@@ -152,11 +152,13 @@ const ProcessView = () => {
           Process Tree View
         </h1>
       </div>
-      <ReactFlow nodes={graphNodes} edges={graphEdges} nodeTypes={nodeTypes}>
-        <Controls />
-        <MiniMap />
-        <Background variant={BackgroundVariant.Dots} gap={10} size={1} />
-      </ReactFlow>
+      <ReactFlowProvider>
+        <ReactFlow nodes={graphNodes} edges={graphEdges} nodeTypes={nodeTypes}>
+          <Controls />
+          <MiniMap pannable zoomable/>
+          <Background variant={BackgroundVariant.Dots} gap={10} size={1} />
+        </ReactFlow>
+      </ReactFlowProvider>
     </div>
   );
 };
